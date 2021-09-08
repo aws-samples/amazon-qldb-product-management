@@ -3,9 +3,9 @@
 ## デプロイ
 
 ### Requirements
-- `aws` コマンド
-- `cdk` コマンド
 - Node.js
+- [`aws` コマンド](https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-chap-install.html) (Amazon API Gateway や AWS IAM など多数のサービスを作成するので、Administrator 相当の広い権限が必要です。また、デプロイする環境は本番環境とは分けることをおすすめいたします。)
+- [`cdk` コマンド](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html)
 
 ### 前準備
 
@@ -82,7 +82,7 @@ cdk deploy ProductManagementFrontendStack
 ## 使い方
 
 ### アップロード機能
-- ヘッダーの右ボタンから csv ファイルをアップロードし、QLDB にデータを挿入します。 **サンプルの csv が csv/sample.csv にあるので、そちらをご利用下さい。** 独自の csv をアップロードする場合は、`ID` というカラムが必要な点にご注意ください。
+- ヘッダーの右ボタンから csv ファイルをアップロードし、QLDB にデータを挿入します。 **サンプルの csv が csv/sample.csv にあるので、そちらをご利用下さい。**
 
 ### Home 画面
 - ID を範囲指定して検索することができます。範囲をしていない場合、全てのアイテムを取得します。( **今回は便宜上実装されていますが、QLDB では一般的に範囲指定クエリは使うべきではありません。ベストプラクティスについては[こちら](https://docs.aws.amazon.com/qldb/latest/developerguide/working.optimize.html)をご参照ください。** )
