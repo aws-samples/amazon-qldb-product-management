@@ -59,12 +59,14 @@ CREATE INDEX on qualitydata (ID)
 ### フロントエンドのデプロイ
 
 フロントエンドから接続先の API を認識させるために、**`.env.local` というファイルを `management-ui` ディレクトリに作成し、内容を以下にします。** `[]`で囲まれた部分は適切な値に変更してください。(**末尾に`/`がないことに注意してください。**)
+以下の API のエンドポイントは ProductManagementBackendStack をデプロイした際に作成した Amazon API Gateway のエンドポイントです。転載しておいた内容をコピーするか、[Amazon API Gateway](https://console.aws.amazon.com/apigateway/main/apis) のページで確認できます。
 
 ```
 VUE_APP_API_ENDPOINT=https://[API ID].execute-api.[Region].amazonaws.com/prod
 ```
 
 続いて、フロントエンドをビルドします。`management-ui` ディレクトリに移動し、以下を実行します。
+
 ```bash
 npm run build
 ```
@@ -80,10 +82,10 @@ cdk deploy ProductManagementFrontendStack
 ## 使い方
 
 ### アップロード機能
-- ヘッダーの右ボタンから csv ファイルをアップロードし、QLDB にデータを挿入します。**サンプルの csv が csv/sample.csv にあるので、そちらをご利用下さい。**独自の csv をアップロードする場合は、`ID` というカラムが必要な点にご注意ください。
+- ヘッダーの右ボタンから csv ファイルをアップロードし、QLDB にデータを挿入します。 **サンプルの csv が csv/sample.csv にあるので、そちらをご利用下さい。** 独自の csv をアップロードする場合は、`ID` というカラムが必要な点にご注意ください。
 
 ### Home 画面
-- ID を範囲指定して検索することができます。範囲をしていない場合、全てのアイテムを取得します。
+- ID を範囲指定して検索することができます。範囲をしていない場合、全てのアイテムを取得します。( **今回は便宜上実装されていますが、QLDB では一般的に範囲指定クエリは使うべきではありません。ベストプラクティスについては[こちら](https://docs.aws.amazon.com/qldb/latest/developerguide/working.optimize.html)をご参照ください。** )
 - ID を指定して詳細ページに遷移することができます。削除されたアイテムは検索結果に出現しないので、こちらから遷移する必要があります。
 - 検索結果の行をクリックすることで詳細ページに遷移します。
 - 検索結果を csv 形式でダウンロードできます。
