@@ -91,6 +91,12 @@
         </div>
       </template>
 
+      <template v-else-if="loadingHistoryFull">
+        <div>
+          フルスキャンして削除されたデータを検索します... (時間がかかる場合があります)
+        </div>
+      </template>
+
       <template v-else-if="!loadingHistory">
         <div>
           履歴は見つかりませんでした
@@ -117,6 +123,7 @@ export default class Detail extends Vue {
 
   loadingLatest = false;
   loadingHistory = false;
+  loadingHistoryFull = false;
 
   downloading = false;
 
@@ -179,6 +186,13 @@ export default class Detail extends Vue {
 
     const res = await API.get(`/data/${this.id}`);
     this.rows = res.data;
+
+    if (this.rows.length === 0) {
+      this.loadingHistoryFull = true;
+      const res = await API.get(`/data/${this.id}?scan=full`);
+      this.rows = res.data;
+      this.loadingHistoryFull = false;
+    }
 
     this.loadingHistory = false;
   }

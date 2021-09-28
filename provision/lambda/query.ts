@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT-0
 import * as lambda from 'aws-lambda';
 import { TransactionExecutor } from 'amazon-qldb-driver-nodejs';
+import { dom } from 'ion-js';
 import qldb from './lib/qldb';
 import queryParams from './lib/queryParams';
 import csvStringify = require('csv-stringify/lib/sync');
@@ -21,6 +22,7 @@ exports.handler = async (event: lambda.APIGatewayProxyEvent): Promise<lambda.API
       return res;
     });
   } else {
+    // The query below is optimized. You shouldn't execute it in production.
     res = await qldb.executeLambda(async (txn: TransactionExecutor) => {
       const stmt = `SELECT * FROM ${process.env.TABLE_NAME} AS q WHERE q.ID >= ? AND q.ID <= ?`;
       const res = await txn.execute(stmt, _from, _to);
@@ -28,8 +30,8 @@ exports.handler = async (event: lambda.APIGatewayProxyEvent): Promise<lambda.API
     });
   }
 
-  const rows = res.getResultList().map((r: any) => r._fields);
-  rows.sort((r0: any, r1: any) => r0.ID - r1.ID);
+  const rows = res.getResultList();
+  rows.sort((r0: dom.Value, r1: dom.Value) => Number(r0.get('ID')) - Number(r1.get('ID')));
 
   if (_type === 'json') {
     return {
